@@ -11,8 +11,11 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+
+    Note mTempNote = new Note();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +28,18 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                DialogNewNote dialog = new DialogNewNote();
+                dialog.show(getSupportFragmentManager(), "");
+            }
+        });
+
+        Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogShowNote dialog = new DialogShowNote();
+                dialog.sendNoteSelected(mTempNote);
+                dialog.show(getSupportFragmentManager(), "123");
             }
         });
     }
@@ -51,5 +64,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void createNewNote(Note note) {
+        mTempNote = note;
     }
 }
