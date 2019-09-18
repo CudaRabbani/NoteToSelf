@@ -7,15 +7,25 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
-    Note mTempNote = new Note();
+    //Note mTempNote = new Note();
+    private List<Note> noteList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private NoteAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,16 +42,23 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show(getSupportFragmentManager(), "");
             }
         });
+        
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mAdapter = new NoteAdapter(this, noteList);
+        
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        
+        recyclerView.setAdapter(mAdapter);
 
-        Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogShowNote dialog = new DialogShowNote();
-                dialog.sendNoteSelected(mTempNote);
-                dialog.show(getSupportFragmentManager(), "123");
-            }
-        });
+        if (noteList.size() == 0) {
+            initNotes();
+        }
+
+
     }
 
     @Override
@@ -67,6 +84,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createNewNote(Note note) {
-        mTempNote = note;
+
+        noteList.add(note);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void showNote(int noteToShow) {
+        DialogShowNote dialog = new DialogShowNote();
+        dialog.sendNoteSelected(noteList.get(noteToShow));
+        dialog.show(getSupportFragmentManager(), "");
+    }
+
+    public void initNotes () {
+        Note temp = new Note();
+        temp.setTitle("Office");
+        temp.setDescription("jas;djh ;ajhsd jkajsdjk lkaslkd alksd lkjaskdkasdkk lkasj aksdl kakslkd ");
+        temp.setIdea(true);
+        noteList.add(temp);
     }
 }
