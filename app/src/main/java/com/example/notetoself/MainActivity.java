@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void initNotes () {
         Note temp = new Note();
-        temp.setTitle("Office");
-        temp.setDescription("jas;djh ;ajhsd jkajsdjk lkaslkd alksd lkjaskdkasdkk lkasj aksdl kakslkd ");
+        temp.setTitle("Demo Title");
+        temp.setDescription("This is a demo description for the demo title.");
         temp.setIdea(true);
         noteList.add(temp);
     }
